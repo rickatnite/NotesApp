@@ -9,9 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NotesApp">
+
+        <activity android:name=".ListActivity"/>
+        <activity android:name=".SettingsActivity"/>
         <activity
             android:name=".NoteActivity"
             android:exported="true">
+
+
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

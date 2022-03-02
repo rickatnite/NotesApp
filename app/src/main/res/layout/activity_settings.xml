@@ -54,7 +54,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <RadioGroup
-        android:id="@+id/radioGroupPriority"
+        android:id="@+id/radioGroupSortBy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -94,7 +94,7 @@
         android:layout_marginTop="16dp"
         android:text="Sort Order:"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroupPriority" />
+        app:layout_constraintTop_toBottomOf="@+id/radioGroupSortBy" />
 
     <RadioGroup
         android:id="@+id/radioGroupSortOrder"

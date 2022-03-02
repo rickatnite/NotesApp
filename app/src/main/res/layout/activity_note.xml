@@ -82,7 +82,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@id/radioGroupPriority"
+        app:layout_constraintBottom_toTopOf="@id/radioGroupSortBy"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
@@ -102,6 +102,8 @@
                 android:text="Subject:"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+
 
             <EditText
                 android:id="@+id/editSubject"
@@ -145,6 +147,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textNote" />
 
+            <TextView
+                android:id="@+id/textViewDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="260dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="95dp"
+                android:text="Date"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textSubject"
+                app:layout_constraintTop_toTopOf="parent" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -159,12 +174,12 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="Priority"
-        app:layout_constraintBottom_toTopOf="@+id/radioGroupPriority"
+        app:layout_constraintBottom_toTopOf="@+id/radioGroupSortBy"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/scrollView" />
 
     <RadioGroup
-        android:id="@+id/radioGroupPriority"
+        android:id="@+id/radioGroupSortBy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
