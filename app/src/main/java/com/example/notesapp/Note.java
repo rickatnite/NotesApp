@@ -8,6 +8,8 @@ public class Note {
     private String subject;
     private String date;
     private String noteContent;
+    private String priority;
+
 
     public Note() {
         noteID = -1;
@@ -43,5 +45,13 @@ public class Note {
 
     public void setNoteContent(String noteContent) {
         this.noteContent = noteContent;
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
     }
 }

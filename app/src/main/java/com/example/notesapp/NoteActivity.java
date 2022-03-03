@@ -10,7 +10,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class NoteActivity extends AppCompatActivity {
 
@@ -19,6 +24,7 @@ public class NoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
 
+        setDateTime();
         initNoteButton();
         initListButton();
         initSettingsButton();
@@ -63,6 +69,8 @@ public class NoteActivity extends AppCompatActivity {
         EditText editNote = findViewById(R.id.editNote);
         Button buttonSave = findViewById(R.id.buttonSave);
 
+
+
         editSubject.setEnabled(enabled);
         editNote.setEnabled(enabled);
         buttonSave.setEnabled(enabled);
@@ -70,6 +78,14 @@ public class NoteActivity extends AppCompatActivity {
         if (enabled) {
             editSubject.requestFocus();
         }
+    }
+
+
+    private void setDateTime() {
+        TextView date  = (TextView) findViewById(R.id.textViewDate);
+        String dateTime = new SimpleDateFormat("MM.dd.yyyy",
+        Locale.getDefault()).format(new Date());
+        date.setText(dateTime);
     }
 
 
