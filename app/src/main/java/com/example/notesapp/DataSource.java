@@ -123,7 +123,30 @@ public class DataSource {
 
 
 
+    public ArrayList<Note> getNotes(String sortField, String sortOrder) {
+        ArrayList<Note> notes = new ArrayList<Note>();
+        try {
+            String query = "SELECT  * FROM note ORDER BY " + sortField + " " + sortOrder;
+            Cursor cursor = database.rawQuery(query, null);
 
+            Note newNote;
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                newNote = new Note();
+                newNote.setNoteID(cursor.getInt(0));
+                newNote.setSubject(cursor.getString(1));
+                newNote.setNoteContent(cursor.getString(2));
+                newNote.setPriority(cursor.getString(3));
+                notes.add(newNote);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+        catch (Exception e) {
+            notes = new ArrayList<Note>();
+        }
+        return notes;
+    }
 
 
 

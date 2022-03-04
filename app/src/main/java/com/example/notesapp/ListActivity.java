@@ -1,12 +1,37 @@
 package com.example.notesapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 
 public class ListActivity extends AppCompatActivity {
+
+    RecyclerView notesList;
+    Adapter noteAdapter;
+    ArrayList<Note> notes;
+
+    private View.OnClickListener onItemClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
+            int position = viewHolder.getAdapterPosition();
+            int noteId = notes.get(position).getNoteID();
+            Intent intent = new Intent(ListActivity.this, NoteActivity.class);
+            intent.putExtra("noteId", noteId);
+            startActivity(intent);
+        }
+    };
+
+
 
 
     @Override
@@ -18,7 +43,43 @@ public class ListActivity extends AppCompatActivity {
         initListButton();
         initSettingsButton();
 
+
+
+
     }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        String sortBy = getSharedPreferences("NotesAppPreferences", Context.MODE_PRIVATE).getString("sortfield", "subject");
+        String sortOrder = getSharedPreferences("NotesAppPreferences", Context.MODE_PRIVATE).getString("sortorder", "ASC");
+
+        DataSource ds = new DataSource(this);
+        try {
+            ds.open();
+            notes = ds.getNotes(sortBy, sortOrder);
+            ds.close();
+//            if (contacts.size() > 0) {
+                RecyclerView notesList = findViewById(R.id.rvNotes);
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+                notesList.setLayoutManager(layoutManager);
+                Adapter noteAdapter = new Adapter(notes, this);
+                noteAdapter.setOnItemClickListener(onItemClickListener);
+                notesList.setAdapter(noteAdapter);
+//            }
+//            else {
+//                Intent intent = new Intent(ContactListActivity.this, MainActivity.class);
+//                startActivity(intent);
+//            }
+        }
+        catch (Exception e) {
+            Toast.makeText(this, "Error retrieving notes", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
 
 
     private void initNoteButton() {
