@@ -72,7 +72,6 @@ public class DataSource {
         try {
             String query = "Select MAX(_id) from note";
             Cursor cursor = database.rawQuery(query, null);
-
             cursor.moveToFirst();
             lastId = cursor.getInt(0);
             cursor.close();
@@ -110,21 +109,38 @@ public class DataSource {
         String query = "SELECT  * FROM contact WHERE _id =" + noteId;
         Cursor cursor = database.rawQuery(query, null);
 
-        //no while loop needed bc only one contact is returned
-        //cursor moves to first record - if contact found, contact obj is populated
         if (cursor.moveToFirst()) {
             note.setNoteID(cursor.getInt(0));
             note.setSubject(cursor.getString(1));
             note.setDate(cursor.getString(2));
             note.setNoteContent(cursor.getString(3));
-            note.setPriority(cursor.getString(3));
-
-//            Calendar calendar = Calendar.getInstance();
-//            calendar.setTimeInMillis(Long.valueOf(cursor.getString(9)));
+            note.setPriority(cursor.getString(4));
 
             cursor.close();
         }
         return note;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
