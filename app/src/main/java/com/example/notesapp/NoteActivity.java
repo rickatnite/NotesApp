@@ -13,8 +13,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.text.SimpleDateFormat;
@@ -37,9 +39,16 @@ public class NoteActivity extends AppCompatActivity {
         initToggleButton();
         initTextChangedEvents();
         initSaveButton();
-        setForEditing(false);
-        currentNote = new Note();
 
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) {
+            initNote(extras.getInt("noteId"));
+        }
+        else {
+            currentNote = new Note();
+        }
+
+        setForEditing(false);
     }
 
     private void initNoteButton() {
@@ -173,6 +182,30 @@ public class NoteActivity extends AppCompatActivity {
 
 
 
+
+    private void initNote(int id) {
+
+        DataSource ds = new DataSource(NoteActivity.this);
+        try {
+            ds.open();
+            currentNote = ds.getSpecificNote(id);
+            ds.close();
+        }
+        catch (Exception e) {
+            Toast.makeText(this, "Load Note Failed", Toast.LENGTH_LONG).show();
+        }
+
+        EditText editSubject = findViewById(R.id.editSubject);
+        TextView textDate = findViewById(R.id.textViewDate);
+        EditText editNote = findViewById(R.id.editNote);
+        RadioButton priority = findViewById(R.id.radioPriority);
+
+        editSubject.setText(currentNote.getSubject());
+        textDate.setText(currentNote.getDate());
+        editNote.setText(currentNote.getNoteContent());
+        priority.setText(currentNote.getPriority());
+
+    }
 
 
 }
