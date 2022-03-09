@@ -134,7 +134,7 @@ public class NoteActivity extends AppCompatActivity {
         });
 
         final TextView tvDate = findViewById(R.id.textViewDate);
-        tvDate.addTextChangedListener(new TextWatcher() {
+        etNote.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 currentNote.setDate(tvDate.getText().toString());
             }
