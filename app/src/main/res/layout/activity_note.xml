@@ -188,21 +188,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Low" />
+            android:text="Low"
+            android:onClick="onPriorityClicked"/>
 
         <RadioButton
             android:id="@+id/radioMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Medium" />
+            android:text="Medium"
+            android:onClick="onPriorityClicked"/>
 
         <RadioButton
             android:id="@+id/radioHigh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="High" />
+            android:text="High"
+            android:onClick="onPriorityClicked"/>
     </RadioGroup>
 
 

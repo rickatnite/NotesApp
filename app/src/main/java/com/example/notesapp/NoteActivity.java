@@ -106,12 +106,10 @@ public class NoteActivity extends AppCompatActivity {
 
 
     private void setDateTime() {
-        TextView date  = findViewById(R.id.textViewDate);
-        String dateTime = new SimpleDateFormat("MM.dd.yyyy",
-        Locale.getDefault()).format(new Date());
+        TextView date = findViewById(R.id.textViewDate);
+        String dateTime = new SimpleDateFormat("MM.dd.yyyy", Locale.getDefault()).format(new Date());
         date.setText(dateTime);
     }
-
 
 
 
@@ -136,63 +134,56 @@ public class NoteActivity extends AppCompatActivity {
         });
 
         final TextView tvDate = findViewById(R.id.textViewDate);
-        etNote.addTextChangedListener(new TextWatcher() {
+        tvDate.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 currentNote.setDate(tvDate.getText().toString());
             }
             public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) { }
             public void onTextChanged(CharSequence s, int start, int before, int count) { }
         });
+
     }
 
 
 
     private void initSaveButton() {
         Button saveButton = findViewById(R.id.buttonSave);
-        RadioGroup rg = (RadioGroup)findViewById(R.id.radioGroupPriority);
+        RadioGroup rg = findViewById(R.id.radioGroupPriority);
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        saveButton.setOnClickListener(view -> {
+            //String radioValue = ((RadioButton)findViewById(rg.getCheckedRadioButtonId())).getText().toString();
+            //if (rg.getCheckedRadioButtonId() != -1) { }
 
-            @Override
-            public void onClick(View view) {
-                //String radioValue = ((RadioButton)findViewById(rg.getCheckedRadioButtonId())).getText().toString();
-
-
-                //if (rg.getCheckedRadioButtonId() != -1) { }
-
-                boolean wasSuccessful;
-                hideKeyboard();
-                DataSource ds = new DataSource(NoteActivity.this);
-                try {
-                    ds.open();
-
-                    if (currentNote.getNoteID() == -1) {
-                        wasSuccessful = ds.insertNote(currentNote);
-                        if (wasSuccessful) {
-                            int newId = ds.getLastNoteId();
-                            currentNote.setNoteID(newId);
-                        }
+            boolean wasSuccessful;
+            hideKeyboard();
+            DataSource ds = new DataSource(NoteActivity.this);
+            try {
+                ds.open();
+                if (currentNote.getNoteID() == -1) {
+                    wasSuccessful = ds.insertNote(currentNote);
+                    if (wasSuccessful) {
+                        int newId = ds.getLastNoteId();
+                        currentNote.setNoteID(newId);
                     }
-                    else {
-                        wasSuccessful = ds.updateNote(currentNote);
-                    }
-                    ds.close();
                 }
-                catch (Exception e) {
-                    wasSuccessful = false;
+                else {
+                    wasSuccessful = ds.updateNote(currentNote);
                 }
-
-                if (wasSuccessful) {
-                    ToggleButton editToggle = findViewById(R.id.toggleButtonEdit);
-                    editToggle.toggle();
-                    setForEditing(false);
-                }
+                ds.close();
+            }
+            catch (Exception e) {
+                wasSuccessful = false;
+            }
+            if (wasSuccessful) {
+                ToggleButton editToggle = findViewById(R.id.toggleButtonEdit);
+                editToggle.toggle();
+                setForEditing(false);
+            }
 
 //                Intent intent = new Intent(NoteActivity.this, ListActivity.class);
 //                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //                startActivity(intent);
 
-            }
         });
     }
 
@@ -209,7 +200,6 @@ public class NoteActivity extends AppCompatActivity {
 
 
     private void initNote(int id) {
-
         DataSource ds = new DataSource(NoteActivity.this);
         try {
             ds.open();
@@ -241,14 +231,81 @@ public class NoteActivity extends AppCompatActivity {
 
     private void initPriorityClick() {
         RadioGroup rgPriority = findViewById(R.id.radioGroupPriority);
-        rgPriority.setOnCheckedChangeListener((arg0, arg1) -> {
-            if (rbHigh.isChecked())
-                currentNote.setPriority("high");
-            else if (rbMed.isChecked())
-                currentNote.setPriority("med");
-            else if (rbLow.isChecked())
-                currentNote.setPriority("low");
+        rgPriority.setOnCheckedChangeListener((rg, checkedId) -> {
+            switch (checkedId) {
+                case R.id.radioLow:
+                    currentNote.setPriority("low");
+                    break;
+                case R.id.radioMedium:
+                    currentNote.setPriority("medium");
+                    break;
+                case R.id.radioHigh:
+                    currentNote.setPriority("high");
+                    break;
+            }
         });
+    }
+
+
+    public void onPriorityClicked(View view) {
+        View.OnClickListener optionOnClickListener = v -> {
+            TextView tvPriority = findViewById(R.id.textPriority);
+            String str;
+            str = ((RadioButton)v).getText().toString(); // copy the string of clicked button
+
+            tvPriority.setText(str);
+
+        };
+        rbLow.setOnClickListener(optionOnClickListener);
+        rbMed.setOnClickListener(optionOnClickListener);
+        rbHigh.setOnClickListener(optionOnClickListener);
+    }
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//        if(rbLow.isChecked()) {
+//                    // do something
+//                }
+//                if(rbMed.isChecked()) {
+//                    // do something
+//                }
+//                if(rbHigh.isChecked()) {
+//                    // do something
+//                }
+
+//            if (rbHigh.isChecked())
+//                currentNote.setPriority("high");
+//            else if (rbMed.isChecked())
+//                currentNote.setPriority("med");
+//            else if (rbLow.isChecked())
+//                currentNote.setPriority("low");
+//        });
 
 //        switch (currentNote.getPriority()) {
 //            case "high": rbHigh.toggle();
@@ -257,23 +314,3 @@ public class NoteActivity extends AppCompatActivity {
 //                break;
 //            default: rbLow.toggle();
 //        }
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-}

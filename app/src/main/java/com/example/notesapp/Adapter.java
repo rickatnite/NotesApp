@@ -29,7 +29,8 @@ public class Adapter extends RecyclerView.Adapter {
         public NoteViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewSubject = itemView.findViewById(R.id.textSubject);
-            textDate = itemView.findViewById(R.id.textViewDate);
+            textDate = itemView.findViewById(R.id.textDate);
+            textPriority = itemView.findViewById(R.id.textPriority);
             deleteButton = itemView.findViewById(R.id.buttonDeleteNote);
             itemView.setTag(this);
             itemView.setOnClickListener(mOnItemClickListener);
@@ -63,7 +64,7 @@ public class Adapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.simple_item_view, parent, false); // or list_item???
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.simple_item_view, parent, false);
         return new NoteViewHolder(v);
     }
 
@@ -72,8 +73,8 @@ public class Adapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         NoteViewHolder nvh = (NoteViewHolder) holder;
         nvh.getTextViewSubject().setText(noteData.get(position).getSubject());
-        //nvh.getTextDate().setText(noteData.get(position).getDate());
-        //nvh.getTextPriority().setText(noteData.get(position).getPriority());
+        nvh.getTextDate().setText(noteData.get(position).getDate());
+        nvh.getTextPriority().setText(noteData.get(position).getPriority());
         if (isDeleting) {
             nvh.getDeleteButton().setVisibility(View.VISIBLE);
             nvh.getDeleteButton().setOnClickListener(view -> deleteItem(position));
@@ -105,7 +106,6 @@ public class Adapter extends RecyclerView.Adapter {
             else {
                 Toast.makeText(parentContext, "Delete Failed!", Toast.LENGTH_LONG).show();
             }
-
         }
         catch (Exception e) {
             Toast.makeText(parentContext, "Delete Failed!", Toast.LENGTH_LONG).show();

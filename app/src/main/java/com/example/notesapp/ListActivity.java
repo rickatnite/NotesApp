@@ -8,13 +8,17 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class ListActivity extends AppCompatActivity {
 
@@ -47,7 +51,6 @@ public class ListActivity extends AppCompatActivity {
         initSettingsButton();
         initAddNoteButton();
         initDeleteSwitch();
-
 
     }
 
@@ -126,13 +129,5 @@ public class ListActivity extends AppCompatActivity {
             noteAdapter.notifyDataSetChanged();
         });
     }
-
-
-
-
-
-
-
-
 
 }
