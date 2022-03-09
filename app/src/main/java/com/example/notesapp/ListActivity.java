@@ -26,19 +26,18 @@ public class ListActivity extends AppCompatActivity {
     Adapter noteAdapter;
     ArrayList<Note> notes;
 
+    //new instance of listener to pass to adapter
     private View.OnClickListener onItemClickListener = new View.OnClickListener() {
         @Override
-        public void onClick(View view) {
+        public void onClick(View view) { //ref to viewHolder that produced the click with getTag
             RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
-            int position = viewHolder.getAdapterPosition();
-            int noteId = notes.get(position).getNoteID();
+            int position = viewHolder.getAdapterPosition(); //use viewHolder to get position in the list to get corresponding Note obj
+            int noteId = notes.get(position).getNoteID(); //position value is index of item clicked in list
             Intent intent = new Intent(ListActivity.this, NoteActivity.class);
-            intent.putExtra("noteId", noteId);
-            startActivity(intent);
+            intent.putExtra("noteId", noteId); //puts noteId in bundle passed to NoteActivity
+            startActivity(intent); //starts NoteActivity by clicking any note in list
         }
     };
-
-
 
 
     @Override
@@ -51,7 +50,6 @@ public class ListActivity extends AppCompatActivity {
         initSettingsButton();
         initAddNoteButton();
         initDeleteSwitch();
-
     }
 
 
@@ -59,23 +57,26 @@ public class ListActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
+        //in onResume instead of onCreate bc it is executed every time the user navigates to the activity
+        //retrieve store user preferences
         String sortBy = getSharedPreferences("NotesAppPreferences", Context.MODE_PRIVATE).getString("sortfield", "subject");
         String sortOrder = getSharedPreferences("NotesAppPreferences", Context.MODE_PRIVATE).getString("sortorder", "ASC");
 
+        //create new datasource object, open db, retrieve note names with getNotes, close db
         DataSource ds = new DataSource(this);
         try {
             ds.open();
             notes = ds.getNotes(sortBy, sortOrder);
             ds.close();
-            if (notes.size() > 0) {
-                notesList = findViewById(R.id.rvNotes);
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-                notesList.setLayoutManager(layoutManager);
+            if (notes.size() > 0) { //setup recyclerView to display data
+                notesList = findViewById(R.id.rvNotes); //ref the widget and create instance of LayoutManager to display indv items
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this); //LLM displays vertical scrolling list
+                notesList.setLayoutManager(layoutManager); //pass arraylist of note names
                 noteAdapter = new Adapter(notes, this);
                 noteAdapter.setOnItemClickListener(onItemClickListener);
-                notesList.setAdapter(noteAdapter);
+                notesList.setAdapter(noteAdapter); //associate adapter with recyclerView
             }
-            else {
+            else { //opens NoteActivity if there are no notes
                 Intent intent = new Intent(ListActivity.this, NoteActivity.class);
                 startActivity(intent);
             }
@@ -122,24 +123,13 @@ public class ListActivity extends AppCompatActivity {
 
     private void initDeleteSwitch() {
         Switch s = findViewById(R.id.switchDelete); //assign switch ref and create listener
-        s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                boolean status = compoundButton.isChecked(); //check switch status - on=true - off=false
-                noteAdapter.setDelete(status); //status passed to adapter
-                noteAdapter.notifyDataSetChanged(); //tells adapter to redraw the list
-            }// if switch is on, delete button will be displayed
+        // if switch is on, delete button will be displayed
+        s.setOnCheckedChangeListener((compoundButton, b) -> {
+            boolean status = compoundButton.isChecked(); //check switch status - on=true - off=false
+            noteAdapter.setDelete(status); //status passed to adapter
+            noteAdapter.notifyDataSetChanged(); //tells adapter to redraw the list
         });
     }
 
-
-//    private void initDeleteSwitch() {
-//        Switch s = findViewById(R.id.switchDelete);
-//        s.setOnCheckedChangeListener((compoundButton, b) -> {
-//            boolean status = compoundButton.isChecked();
-//            noteAdapter.setDelete(status);
-//            noteAdapter.notifyDataSetChanged();
-//        });
-//    }
 
 }

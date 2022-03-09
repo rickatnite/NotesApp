@@ -82,24 +82,20 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void initSortByClick() {
         RadioGroup rgSortBy = findViewById(R.id.radioGroupPriority);
-        rgSortBy.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(RadioGroup arg0, int arg1) {
-                RadioButton rbDate = findViewById(R.id.radioDate);
-                RadioButton rbPriority = findViewById(R.id.radioPriority);
-                if (rbDate.isChecked()) {
-                    getSharedPreferences("NotesAppPreferences",
-                            Context.MODE_PRIVATE).edit().putString("sortfield", "date").apply();
-                }
-                else if (rbPriority.isChecked()) {
-                    getSharedPreferences("NotesAppPreferences",
-                            Context.MODE_PRIVATE).edit().putString("sortfield", "priority").apply();
-                }
-                else {
-                    getSharedPreferences("NotesAppPreferences",
-                            Context.MODE_PRIVATE).edit().putString("sortfield", "subject").apply();
-                }
+        rgSortBy.setOnCheckedChangeListener((arg0, arg1) -> {
+            RadioButton rbDate = findViewById(R.id.radioDate);
+            RadioButton rbPriority = findViewById(R.id.radioPriority);
+            if (rbDate.isChecked()) {
+                getSharedPreferences("NotesAppPreferences",
+                        Context.MODE_PRIVATE).edit().putString("sortfield", "date").apply();
+            }
+            else if (rbPriority.isChecked()) {
+                getSharedPreferences("NotesAppPreferences",
+                        Context.MODE_PRIVATE).edit().putString("sortfield", "priority").apply();
+            }
+            else {
+                getSharedPreferences("NotesAppPreferences",
+                        Context.MODE_PRIVATE).edit().putString("sortfield", "subject").apply();
             }
         });
     }
@@ -107,19 +103,15 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void initSortOrderClick() {
         RadioGroup rgSortOrder = findViewById(R.id.radioGroupSortOrder);
-        rgSortOrder.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(RadioGroup arg0, int arg1) {
-                RadioButton rbAscending = findViewById(R.id.radioAscending);
-                if (rbAscending.isChecked()) {
-                    getSharedPreferences("NotesAppPreferences",
-                            Context.MODE_PRIVATE).edit().putString("sortorder", "ASC").apply();
-                }
-                else {
-                    getSharedPreferences("NotesAppPreferences",
-                            Context.MODE_PRIVATE).edit().putString("sortorder", "DESC").apply();
-                }
+        rgSortOrder.setOnCheckedChangeListener((arg0, arg1) -> {
+            RadioButton rbAscending = findViewById(R.id.radioAscending);
+            if (rbAscending.isChecked()) {
+                getSharedPreferences("NotesAppPreferences",
+                        Context.MODE_PRIVATE).edit().putString("sortorder", "ASC").apply();
+            }
+            else {
+                getSharedPreferences("NotesAppPreferences",
+                        Context.MODE_PRIVATE).edit().putString("sortorder", "DESC").apply();
             }
         });
     }

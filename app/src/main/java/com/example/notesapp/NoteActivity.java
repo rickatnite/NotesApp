@@ -47,13 +47,13 @@ public class NoteActivity extends AppCompatActivity {
         rbMed = findViewById(R.id.radioMedium);
         rbHigh = findViewById(R.id.radioHigh);
 
-        Bundle extras = getIntent().getExtras();
+        Bundle extras = getIntent().getExtras(); //get passed id and call initNote to retrieve and display note - corresponds to ListActivity onclick
         if(extras != null) {
             initNote(extras.getInt("noteId"));
-        }
+        }         //checks intent for extras, if found gets noteId, retrieves note from db, displays data in layout
         else {
             currentNote = new Note();
-        }
+        }         //if no extra, assigns new note obj to currentNote making id -1
         setForEditing(false);
     }
 
@@ -85,6 +85,7 @@ public class NoteActivity extends AppCompatActivity {
         editToggle.setOnClickListener(view -> setForEditing(editToggle.isChecked()));
     }
 
+
     private void setForEditing(boolean enabled) {
         EditText editSubject = findViewById(R.id.editSubject);
         EditText editNote = findViewById(R.id.editNote);
@@ -103,6 +104,7 @@ public class NoteActivity extends AppCompatActivity {
     }
 
 
+    //method to set current date/time from locale
     private void setDateTime() {
         TextView date = findViewById(R.id.textViewDate);
         String dateTime = new SimpleDateFormat("MM.dd.yyyy", Locale.getDefault()).format(new Date());
@@ -146,7 +148,6 @@ public class NoteActivity extends AppCompatActivity {
 
     private void initSaveButton() {
         Button saveButton = findViewById(R.id.buttonSave);
-        RadioGroup rg = findViewById(R.id.radioGroupPriority);
 
         saveButton.setOnClickListener(view -> {
             boolean wasSuccessful;
@@ -188,8 +189,9 @@ public class NoteActivity extends AppCompatActivity {
 
 
 
-
+    //method to retrieve note and populate layout with retrieved values
     private void initNote(int id) {
+        //retrieve note and assign to activity's currentNote variable
         DataSource ds = new DataSource(NoteActivity.this);
         try {
             ds.open();
@@ -200,14 +202,17 @@ public class NoteActivity extends AppCompatActivity {
             Toast.makeText(this, "Load Note Failed", Toast.LENGTH_LONG).show();
         }
 
+        //refs to all widgets in layout so note data is displayed in them
         EditText editSubject = findViewById(R.id.editSubject);
         TextView textDate = findViewById(R.id.textViewDate);
         EditText editNote = findViewById(R.id.editNote);
 
+        // widgets set to display the values in retrieved note
         editSubject.setText(currentNote.getSubject());
         textDate.setText(currentNote.getDate());
         editNote.setText(currentNote.getNoteContent());
 
+        //retrieve priority level from radio buttons
         switch (currentNote.getPriority()) {
             case "high": rbHigh.toggle();
                 break;
@@ -218,6 +223,7 @@ public class NoteActivity extends AppCompatActivity {
     }
 
 
+    //method to set priority in obj
     private void initPriorityClick() {
         RadioGroup rgPriority = findViewById(R.id.radioGroupPriority);
         rgPriority.setOnCheckedChangeListener((rg, checkedId) -> {
@@ -238,6 +244,7 @@ public class NoteActivity extends AppCompatActivity {
 
 
 
+    //method to set textview to selected priority
     public void onPriorityClicked(View view) {
         View.OnClickListener optionOnClickListener = v -> {
             TextView tvPriority = findViewById(R.id.textPriority);
@@ -254,40 +261,4 @@ public class NoteActivity extends AppCompatActivity {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//String radioValue = ((RadioButton)findViewById(rg.getCheckedRadioButtonId())).getText().toString();
-//if (rg.getCheckedRadioButtonId() != -1) { }
-//                Intent intent = new Intent(NoteActivity.this, ListActivity.class);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                startActivity(intent);
-
-
-//            if (rbHigh.isChecked())
-//                currentNote.setPriority("high");
-//            else if (rbMed.isChecked())
-//                currentNote.setPriority("med");
-//            else if (rbLow.isChecked())
-//                currentNote.setPriority("low");
-//        });
-
-//        switch (currentNote.getPriority()) {
-//            case "high": rbHigh.toggle();
-//                break;
-//            case "med": rbMed.toggle();
-//                break;
-//            default: rbLow.toggle();
-//        }
 
