@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -53,7 +54,6 @@ public class NoteActivity extends AppCompatActivity {
         else {
             currentNote = new Note();
         }
-
         setForEditing(false);
     }
 
@@ -84,8 +84,6 @@ public class NoteActivity extends AppCompatActivity {
         final ToggleButton editToggle = findViewById(R.id.toggleButtonEdit);
         editToggle.setOnClickListener(view -> setForEditing(editToggle.isChecked()));
     }
-
-
 
     private void setForEditing(boolean enabled) {
         EditText editSubject = findViewById(R.id.editSubject);
@@ -151,9 +149,6 @@ public class NoteActivity extends AppCompatActivity {
         RadioGroup rg = findViewById(R.id.radioGroupPriority);
 
         saveButton.setOnClickListener(view -> {
-            //String radioValue = ((RadioButton)findViewById(rg.getCheckedRadioButtonId())).getText().toString();
-            //if (rg.getCheckedRadioButtonId() != -1) { }
-
             boolean wasSuccessful;
             hideKeyboard();
             DataSource ds = new DataSource(NoteActivity.this);
@@ -179,11 +174,6 @@ public class NoteActivity extends AppCompatActivity {
                 editToggle.toggle();
                 setForEditing(false);
             }
-
-//                Intent intent = new Intent(NoteActivity.this, ListActivity.class);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                startActivity(intent);
-
         });
     }
 
@@ -225,7 +215,6 @@ public class NoteActivity extends AppCompatActivity {
                 break;
             default: rbLow.toggle();
         }
-
     }
 
 
@@ -247,22 +236,19 @@ public class NoteActivity extends AppCompatActivity {
     }
 
 
+
+
     public void onPriorityClicked(View view) {
         View.OnClickListener optionOnClickListener = v -> {
             TextView tvPriority = findViewById(R.id.textPriority);
             String str;
             str = ((RadioButton)v).getText().toString(); // copy the string of clicked button
-
             tvPriority.setText(str);
-
         };
         rbLow.setOnClickListener(optionOnClickListener);
         rbMed.setOnClickListener(optionOnClickListener);
         rbHigh.setOnClickListener(optionOnClickListener);
     }
-
-
-
 
 
 }
@@ -282,22 +268,12 @@ public class NoteActivity extends AppCompatActivity {
 
 
 
+//String radioValue = ((RadioButton)findViewById(rg.getCheckedRadioButtonId())).getText().toString();
+//if (rg.getCheckedRadioButtonId() != -1) { }
+//                Intent intent = new Intent(NoteActivity.this, ListActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                startActivity(intent);
 
-
-
-
-
-
-
-//        if(rbLow.isChecked()) {
-//                    // do something
-//                }
-//                if(rbMed.isChecked()) {
-//                    // do something
-//                }
-//                if(rbHigh.isChecked()) {
-//                    // do something
-//                }
 
 //            if (rbHigh.isChecked())
 //                currentNote.setPriority("high");
@@ -314,3 +290,4 @@ public class NoteActivity extends AppCompatActivity {
 //                break;
 //            default: rbLow.toggle();
 //        }
+

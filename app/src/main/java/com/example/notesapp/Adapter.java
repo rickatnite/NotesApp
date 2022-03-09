@@ -1,10 +1,13 @@
 package com.example.notesapp;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +28,7 @@ public class Adapter extends RecyclerView.Adapter {
         public TextView textDate;
         public TextView textPriority;
         public Button deleteButton;
+        public RadioGroup rgp;
 
         public NoteViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -71,10 +75,20 @@ public class Adapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+
         NoteViewHolder nvh = (NoteViewHolder) holder;
         nvh.getTextViewSubject().setText(noteData.get(position).getSubject());
         nvh.getTextDate().setText(noteData.get(position).getDate());
         nvh.getTextPriority().setText(noteData.get(position).getPriority());
+
+            switch(noteData.get(position).getPriority()){
+                case "high": nvh.getTextPriority().setTextColor(Color.RED); break;
+                case "medium": nvh.getTextPriority().setTextColor(Color.YELLOW); break;
+                default: nvh.getTextPriority().setTextColor(Color.GREEN); break;
+            }
+
+
+
         if (isDeleting) {
             nvh.getDeleteButton().setVisibility(View.VISIBLE);
             nvh.getDeleteButton().setOnClickListener(new View.OnClickListener() {
@@ -178,4 +192,23 @@ public class Adapter extends RecyclerView.Adapter {
 //        });
 //        return v;
 //    }
+
+
+//        nvh.rgp.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if(rbLow.isChecked()) {
+//                    nvh.getTextPriority().setTextColor(Color.GREEN);
+//                }
+//                else if(rbMed.isChecked()) {
+//                    nvh.getTextPriority().setTextColor(Color.YELLOW);
+//                }
+//                else if(rbHigh.isChecked()) {
+//                    nvh.getTextPriority().setTextColor(Color.RED);
+//                }
+//            }
+//        });
+
+
+
 
