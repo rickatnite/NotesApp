@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,12 +16,16 @@ public class Adapter extends RecyclerView.Adapter {
 
     private ArrayList<Note> noteData;
     private View.OnClickListener mOnItemClickListener;
+    private Context parentContext;
+    private boolean isDeleting;
 
     public class NoteViewHolder extends RecyclerView.ViewHolder {
 
         public TextView textViewSubject;
         public TextView textDate;
+        public TextView textPriority;
         public Button deleteButton;
+
         public NoteViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewSubject = itemView.findViewById(R.id.textSubject);
@@ -36,6 +41,9 @@ public class Adapter extends RecyclerView.Adapter {
         public TextView getTextDate() {
             return textDate;
         }
+        public TextView getTextPriority() {
+            return textPriority;
+        }
         public TextView getDeleteButton() {
             return deleteButton;
         }
@@ -43,8 +51,9 @@ public class Adapter extends RecyclerView.Adapter {
 
     public Adapter(ArrayList<Note> arrayList, Context context) {
         noteData = arrayList;
-        //parentContext = context;
+        parentContext = context;
     }
+
 
     public void setOnItemClickListener(View.OnClickListener itemClickListener) {
         mOnItemClickListener = itemClickListener;
@@ -60,22 +69,18 @@ public class Adapter extends RecyclerView.Adapter {
 
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         NoteViewHolder nvh = (NoteViewHolder) holder;
         nvh.getTextViewSubject().setText(noteData.get(position).getSubject());
-        nvh.getTextDate().setText(noteData.get(position).getDate());
-//        if (isDeleting) {
-//            nvh.getDeleteButton().setVisibility(View.VISIBLE);
-//            nvh.getDeleteButton().setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    deleteItem(position);
-//                }
-//            });
-//        }
-//        else {
-//            nvh.getDeleteButton().setVisibility(View.INVISIBLE);
-//        }
+        //nvh.getTextDate().setText(noteData.get(position).getDate());
+        //nvh.getTextPriority().setText(noteData.get(position).getPriority());
+        if (isDeleting) {
+            nvh.getDeleteButton().setVisibility(View.VISIBLE);
+            nvh.getDeleteButton().setOnClickListener(view -> deleteItem(position));
+        }
+        else {
+            nvh.getDeleteButton().setVisibility(View.INVISIBLE);
+        }
     }
 
 
@@ -86,6 +91,86 @@ public class Adapter extends RecyclerView.Adapter {
 
 
 
+    private void deleteItem(int position) {
+        Note note = noteData.get(position);
+        DataSource ds = new DataSource(parentContext);
+        try {
+            ds.open();
+            boolean didDelete = ds.deleteNote(note.getNoteID());
+            ds.close();
+            if (didDelete) {
+                noteData.remove(position);
+                notifyDataSetChanged();
+            }
+            else {
+                Toast.makeText(parentContext, "Delete Failed!", Toast.LENGTH_LONG).show();
+            }
+
+        }
+        catch (Exception e) {
+            Toast.makeText(parentContext, "Delete Failed!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void setDelete(boolean b) {
+        isDeleting = b;
+    }
+
 
 
 }
+
+//    private void deleteOption(int noteToDelete, Context context) {
+//        DataSource db = new DataSource(context);
+//        try {
+//            db.open();
+//            db.deleteNote(noteToDelete);
+//            db.close();
+//        }
+//        catch (Exception e) {
+//            Toast.makeText(parentContext, "Delete Note Failed", Toast.LENGTH_LONG).show();
+//        }
+//        this.notifyDataSetChanged();
+//    }
+//
+
+
+//    @Override
+//    public View getView(int position, View convertView, ViewGroup parent) {
+//        View v = convertView;
+//        try {
+//            Note note = noteData.get(position);
+//
+//            if (v == null) {
+//                LayoutInflater vi = (LayoutInflater) parentContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//                v = vi.inflate(R.layout.simple_item_view, null); // or list_item?
+//            }
+//            TextView noteSubject = (TextView) v.findViewById(R.id.textSubject);
+//            noteSubject.setText(note.getSubject());
+//
+//            TextView notePriority = (TextView) v.findViewById(R.id.textPriority);
+//            switch(note.getPriority()){
+//                case 3: notePriority.setText("High"); break;
+//                case 2: notePriority.setText("Medium"); break;
+//                default: notePriority.setText("Low"); break;
+//            }
+//            TextView noteDate = (TextView) v.findViewById(R.id.textDate);
+//            noteDate.setText(note.getDate().toString());
+//        }
+//        catch (Exception e) {
+//            e.printStackTrace();
+//            e.getCause();
+//        }
+//
+//        final Button bDelete = (Button) v.findViewById(R.id.buttonDeleteNote);
+//        final Note note = noteData.get(position);
+//
+//        bDelete.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                noteData.remove(note);
+//                deleteOption(note.getNoteID(), parentContext);
+//            }
+//        });
+//        return v;
+//    }
+

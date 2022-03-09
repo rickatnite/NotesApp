@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,8 +45,8 @@ public class ListActivity extends AppCompatActivity {
         initNoteButton();
         initListButton();
         initSettingsButton();
-
-
+        initAddNoteButton();
+        initDeleteSwitch();
 
 
     }
@@ -61,18 +64,18 @@ public class ListActivity extends AppCompatActivity {
             ds.open();
             notes = ds.getNotes(sortBy, sortOrder);
             ds.close();
-//            if (contacts.size() > 0) {
-                RecyclerView notesList = findViewById(R.id.rvNotes);
+            if (notes.size() > 0) {
+                notesList = findViewById(R.id.rvNotes);
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
                 notesList.setLayoutManager(layoutManager);
                 Adapter noteAdapter = new Adapter(notes, this);
                 noteAdapter.setOnItemClickListener(onItemClickListener);
                 notesList.setAdapter(noteAdapter);
-//            }
-//            else {
-//                Intent intent = new Intent(ContactListActivity.this, MainActivity.class);
-//                startActivity(intent);
-//            }
+            }
+            else {
+                Intent intent = new Intent(ListActivity.this, NoteActivity.class);
+                startActivity(intent);
+            }
         }
         catch (Exception e) {
             Toast.makeText(this, "Error retrieving notes", Toast.LENGTH_LONG).show();
@@ -106,10 +109,23 @@ public class ListActivity extends AppCompatActivity {
     }
 
 
+    private void initAddNoteButton() {
+        Button newNote = findViewById(R.id.buttonNewNote);
+        newNote.setOnClickListener(v -> {
+            Intent intent = new Intent(ListActivity.this, NoteActivity.class);
+            startActivity(intent);
+        });
+    }
 
 
-
-
+    private void initDeleteSwitch() {
+        Switch s = findViewById(R.id.switchDelete);
+        s.setOnCheckedChangeListener((compoundButton, b) -> {
+            boolean status = compoundButton.isChecked();
+            noteAdapter.setDelete(status);
+            noteAdapter.notifyDataSetChanged();
+        });
+    }
 
 
 

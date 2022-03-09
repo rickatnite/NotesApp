@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -14,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +26,7 @@ import java.util.Locale;
 public class NoteActivity extends AppCompatActivity {
 
     private Note currentNote;
+    RadioButton rbLow, rbMed, rbHigh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,11 @@ public class NoteActivity extends AppCompatActivity {
         initToggleButton();
         initTextChangedEvents();
         initSaveButton();
+        initPriorityClick();
+
+        rbLow = findViewById(R.id.radioLow);
+        rbMed = findViewById(R.id.radioMedium);
+        rbHigh = findViewById(R.id.radioHigh);
 
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
@@ -74,7 +80,6 @@ public class NoteActivity extends AppCompatActivity {
         });
     }
 
-
     private void initToggleButton() {
         final ToggleButton editToggle = findViewById(R.id.toggleButtonEdit);
         editToggle.setOnClickListener(view -> setForEditing(editToggle.isChecked()));
@@ -101,7 +106,7 @@ public class NoteActivity extends AppCompatActivity {
 
 
     private void setDateTime() {
-        TextView date  = (TextView) findViewById(R.id.textViewDate);
+        TextView date  = findViewById(R.id.textViewDate);
         String dateTime = new SimpleDateFormat("MM.dd.yyyy",
         Locale.getDefault()).format(new Date());
         date.setText(dateTime);
@@ -129,16 +134,32 @@ public class NoteActivity extends AppCompatActivity {
             public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) { }
             public void onTextChanged(CharSequence s, int start, int before, int count) { }
         });
+
+        final TextView tvDate = findViewById(R.id.textViewDate);
+        etNote.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                currentNote.setDate(tvDate.getText().toString());
+            }
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) { }
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+        });
     }
 
 
 
     private void initSaveButton() {
         Button saveButton = findViewById(R.id.buttonSave);
+        RadioGroup rg = (RadioGroup)findViewById(R.id.radioGroupPriority);
+
         saveButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
+                //String radioValue = ((RadioButton)findViewById(rg.getCheckedRadioButtonId())).getText().toString();
+
+
+                //if (rg.getCheckedRadioButtonId() != -1) { }
+
                 boolean wasSuccessful;
                 hideKeyboard();
                 DataSource ds = new DataSource(NoteActivity.this);
@@ -151,7 +172,6 @@ public class NoteActivity extends AppCompatActivity {
                             int newId = ds.getLastNoteId();
                             currentNote.setNoteID(newId);
                         }
-
                     }
                     else {
                         wasSuccessful = ds.updateNote(currentNote);
@@ -167,6 +187,11 @@ public class NoteActivity extends AppCompatActivity {
                     editToggle.toggle();
                     setForEditing(false);
                 }
+
+//                Intent intent = new Intent(NoteActivity.this, ListActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                startActivity(intent);
+
             }
         });
     }
@@ -198,14 +223,57 @@ public class NoteActivity extends AppCompatActivity {
         EditText editSubject = findViewById(R.id.editSubject);
         TextView textDate = findViewById(R.id.textViewDate);
         EditText editNote = findViewById(R.id.editNote);
-        RadioButton priority = findViewById(R.id.radioPriority);
 
         editSubject.setText(currentNote.getSubject());
         textDate.setText(currentNote.getDate());
         editNote.setText(currentNote.getNoteContent());
-        priority.setText(currentNote.getPriority());
+
+        switch (currentNote.getPriority()) {
+            case "high": rbHigh.toggle();
+                break;
+            case "med": rbMed.toggle();
+                break;
+            default: rbLow.toggle();
+        }
 
     }
+
+
+    private void initPriorityClick() {
+        RadioGroup rgPriority = findViewById(R.id.radioGroupPriority);
+        rgPriority.setOnCheckedChangeListener((arg0, arg1) -> {
+            if (rbHigh.isChecked())
+                currentNote.setPriority("high");
+            else if (rbMed.isChecked())
+                currentNote.setPriority("med");
+            else if (rbLow.isChecked())
+                currentNote.setPriority("low");
+        });
+
+//        switch (currentNote.getPriority()) {
+//            case "high": rbHigh.toggle();
+//                break;
+//            case "med": rbMed.toggle();
+//                break;
+//            default: rbLow.toggle();
+//        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

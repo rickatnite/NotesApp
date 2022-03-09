@@ -97,7 +97,7 @@ public class DataSource {
             cursor.close();
         }
         catch (Exception e) {
-            noteSubs = new ArrayList<String>();
+            noteSubs = new ArrayList<>();
         }
         return noteSubs;
     }
@@ -106,7 +106,7 @@ public class DataSource {
 
     public Note getSpecificNote(int noteId) {
         Note note = new Note();
-        String query = "SELECT  * FROM contact WHERE _id =" + noteId;
+        String query = "SELECT  * FROM note WHERE _id =" + noteId;
         Cursor cursor = database.rawQuery(query, null);
 
         if (cursor.moveToFirst()) {
@@ -135,22 +135,32 @@ public class DataSource {
                 newNote = new Note();
                 newNote.setNoteID(cursor.getInt(0));
                 newNote.setSubject(cursor.getString(1));
-                newNote.setNoteContent(cursor.getString(2));
-                newNote.setPriority(cursor.getString(3));
+                newNote.setDate(cursor.getString(2));
+                newNote.setNoteContent(cursor.getString(3));
+                newNote.setPriority(cursor.getString(4));
                 notes.add(newNote);
                 cursor.moveToNext();
             }
             cursor.close();
         }
         catch (Exception e) {
-            notes = new ArrayList<Note>();
+            notes = new ArrayList<>();
         }
         return notes;
     }
 
 
 
-
+    public boolean deleteNote(int noteId) {
+        boolean didDelete = false;
+        try {
+            didDelete = database.delete("note", "_id=" + noteId, null) > 0;
+        }
+        catch (Exception e) {
+            //Do nothing -return value already set to false
+        }
+        return didDelete;
+    }
 
 
 

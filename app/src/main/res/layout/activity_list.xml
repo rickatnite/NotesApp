@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:contentDescription="@string/button_to_display_a_list_of_contacts"
+            android:contentDescription="@string/button_to_display_notes"
             app:srcCompat="@android:drawable/ic_menu_edit" />
 
         <ImageButton
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:contentDescription="@string/button_to_display_contacts_on_a_map"
+            android:contentDescription="@string/button_to_display_a_list_of_notes"
             app:srcCompat="@android:drawable/ic_menu_sort_by_size" />
 
         <ImageButton

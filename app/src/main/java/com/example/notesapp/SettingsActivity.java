@@ -81,7 +81,7 @@ public class SettingsActivity extends AppCompatActivity {
 
 
     private void initSortByClick() {
-        RadioGroup rgSortBy = findViewById(R.id.radioGroupSortBy);
+        RadioGroup rgSortBy = findViewById(R.id.radioGroupPriority);
         rgSortBy.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
             @Override
@@ -117,7 +117,8 @@ public class SettingsActivity extends AppCompatActivity {
                             Context.MODE_PRIVATE).edit().putString("sortorder", "ASC").apply();
                 }
                 else {
-                    getSharedPreferences("NotesAppPreferences", Context.MODE_PRIVATE).edit().putString("sortorder", "DESC").apply();
+                    getSharedPreferences("NotesAppPreferences",
+                            Context.MODE_PRIVATE).edit().putString("sortorder", "DESC").apply();
                 }
             }
         });
