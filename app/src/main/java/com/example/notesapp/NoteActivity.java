@@ -221,7 +221,7 @@ public class NoteActivity extends AppCompatActivity {
         switch (currentNote.getPriority()) {
             case "high": rbHigh.toggle();
                 break;
-            case "med": rbMed.toggle();
+            case "medium": rbMed.toggle();
                 break;
             default: rbLow.toggle();
         }
