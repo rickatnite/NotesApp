@@ -45,7 +45,7 @@ public class Adapter extends RecyclerView.Adapter {
         public TextView getTextPriority() {
             return textPriority;
         }
-        public TextView getDeleteButton() {
+        public Button getDeleteButton() {
             return deleteButton;
         }
     }
@@ -70,14 +70,19 @@ public class Adapter extends RecyclerView.Adapter {
 
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         NoteViewHolder nvh = (NoteViewHolder) holder;
         nvh.getTextViewSubject().setText(noteData.get(position).getSubject());
         nvh.getTextDate().setText(noteData.get(position).getDate());
         nvh.getTextPriority().setText(noteData.get(position).getPriority());
         if (isDeleting) {
             nvh.getDeleteButton().setVisibility(View.VISIBLE);
-            nvh.getDeleteButton().setOnClickListener(view -> deleteItem(position));
+            nvh.getDeleteButton().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteItem(holder.getAdapterPosition());
+                }
+            });
         }
         else {
             nvh.getDeleteButton().setVisibility(View.INVISIBLE);
@@ -90,7 +95,9 @@ public class Adapter extends RecyclerView.Adapter {
         return noteData.size();
     }
 
-
+    public void setDelete(boolean b) {
+        isDeleting = b;
+    }
 
     private void deleteItem(int position) {
         Note note = noteData.get(position);
@@ -112,9 +119,7 @@ public class Adapter extends RecyclerView.Adapter {
         }
     }
 
-    public void setDelete(boolean b) {
-        isDeleting = b;
-    }
+
 
 
 

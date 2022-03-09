@@ -71,7 +71,7 @@ public class ListActivity extends AppCompatActivity {
                 notesList = findViewById(R.id.rvNotes);
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
                 notesList.setLayoutManager(layoutManager);
-                Adapter noteAdapter = new Adapter(notes, this);
+                noteAdapter = new Adapter(notes, this);
                 noteAdapter.setOnItemClickListener(onItemClickListener);
                 notesList.setAdapter(noteAdapter);
             }
@@ -120,14 +120,26 @@ public class ListActivity extends AppCompatActivity {
         });
     }
 
-
     private void initDeleteSwitch() {
-        Switch s = findViewById(R.id.switchDelete);
-        s.setOnCheckedChangeListener((compoundButton, b) -> {
-            boolean status = compoundButton.isChecked();
-            noteAdapter.setDelete(status);
-            noteAdapter.notifyDataSetChanged();
+        Switch s = findViewById(R.id.switchDelete); //assign switch ref and create listener
+        s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                boolean status = compoundButton.isChecked(); //check switch status - on=true - off=false
+                noteAdapter.setDelete(status); //status passed to adapter
+                noteAdapter.notifyDataSetChanged(); //tells adapter to redraw the list
+            }// if switch is on, delete button will be displayed
         });
     }
+
+
+//    private void initDeleteSwitch() {
+//        Switch s = findViewById(R.id.switchDelete);
+//        s.setOnCheckedChangeListener((compoundButton, b) -> {
+//            boolean status = compoundButton.isChecked();
+//            noteAdapter.setDelete(status);
+//            noteAdapter.notifyDataSetChanged();
+//        });
+//    }
 
 }
